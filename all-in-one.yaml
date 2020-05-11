@@ -1,0 +1,118 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: autosecret
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: autosecret-sa
+  namespace: autosecret
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: autosecretClusterRole
+rules:
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs: ["watch"]
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "list", "update", "create", "delete"]
+
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: autosecretClusterRoleBinding
+subjects:
+- kind: ServiceAccount
+  name: autosecret-sa
+  namespace: autosecret
+roleRef:
+  kind: ClusterRole
+  name: view
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: autosecret
+  namespace: autosecret
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: autosecret
+  template:
+    metadata:
+      labels:
+        app: autosecret
+    spec:
+      serviceAccountName: autosecret-sa
+      containers:
+      - name: autosecret
+        image: pristtlt/autosecret:v1.0
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: config
+          mountPath: /srv/config.json
+          subPath: config.json
+      volumes:
+      - name: config
+        configMap:
+          name: config
+          items:
+          - key: config.json
+            path: config.json
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+  namespace: autosecret
+data:
+  config.json: |-
+    {
+      "matchRole": "project-.*-staging",
+      "secrets": [
+        {
+          "name": "mysqluser",
+          "type": "Opaque",
+          "data": {
+            "username": "root",
+            "password": "mypassword"
+          }
+        },
+        {
+          "name": "ali-docker-user",
+          "type": "kubernetes.io/dockerconfigjson",
+          "overwrite": true,
+          "data": {
+            ".dockerconfigjson": {
+              "auths": {
+                "registry.cn-hongkong.aliyuncs.com": {
+                  "Username": "alidockeruser",
+                  "Password": "123456",
+                  "Email": "test@test.com"
+                },
+                "registry.cn-shenzhen.aliyuncs.com": {
+                  "Username": "alidockeruser2",
+                  "Password": "7890123",
+                  "Email": "test@test.com"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+
+
+

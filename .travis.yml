@@ -1,0 +1,19 @@
+if: branch =~ ^master$
+language: bash
+services: docker
+
+install: skip
+script: skip
+
+before_deploy: |-
+  set -e
+  export IMAGES="${DOCKER_REPO}:v1.0"
+  export DEPLOY_SCRIPT="docker push ${IMAGES}"
+  docker build -t ${IMAGES} .
+
+deploy:
+  - provider: script
+    script: >-
+      docker login --username ${DOCKER_USER} --password ${DOCKER_PASSWORD}
+      && ${DEPLOY_SCRIPT}
+

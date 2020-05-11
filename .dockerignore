@@ -1,0 +1,9 @@
+.git
+venv
+config.json
+__pycache__
+Dockerfile
+.gitignore
+.travis.yml
+docker-compose.yaml
+all-in-one.yaml

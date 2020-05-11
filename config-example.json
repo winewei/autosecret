@@ -1,0 +1,34 @@
+{
+  "matchRole": "project-.*-staging",
+  "secrets": [
+    {
+      "name": "mysqluser",
+      "type": "Opaque",
+      "data": {
+        "username": "root",
+        "password": "mypassword"
+      }
+    },
+    {
+      "name": "ali-docker-user",
+      "type": "kubernetes.io/dockerconfigjson",
+      "overwrite": true,
+      "data": {
+        ".dockerconfigjson": {
+          "auths": {
+            "registry.cn-hongkong.aliyuncs.com": {
+              "Username": "alidockeruser",
+              "Password": "123456",
+              "Email": "test@test.com"
+            },
+            "registry.cn-shenzhen.aliyuncs.com": {
+              "Username": "alidockeruser2",
+              "Password": "7890123",
+              "Email": "test@test.com"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

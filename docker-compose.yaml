@@ -1,0 +1,13 @@
+version: '2.3'
+
+services:
+  autosecret:
+    image: autosecret:v1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /srv
+    volumes:
+      - "./config.json:/srv/config.json"
+      - "~/.kube:/root/.kube"
+      - "~/.minikube:/root/.minikube"
