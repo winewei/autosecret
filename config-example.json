@@ -10,6 +10,17 @@
       }
     },
     {
+      "name": "mysqluserxxx",
+      "type": "Opaque",
+      "data": {
+        "username": "xxx",
+        "db": "hello.com",
+        "port": 3306,
+        "username": "root",
+        "password": "mypass"
+      }
+    },
+    {
       "name": "ali-docker-user",
       "type": "kubernetes.io/dockerconfigjson",
       "overwrite": true,

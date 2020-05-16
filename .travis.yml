@@ -7,7 +7,8 @@ script: skip
 
 before_deploy: |-
   set -e
-  export IMAGES="${DOCKER_REPO}:v1.0"
+  export TAG=`grep -o 'VERSION=.*' main.py  | awk -F '=' '{print $2}'`
+  export IMAGES="${DOCKER_REPO}:v${TAG}"
   export DEPLOY_SCRIPT="docker push ${IMAGES}"
   docker build -t ${IMAGES} .
 

@@ -110,6 +110,6 @@ Full config `config.json`
     * `type` support `Opaque` and `kubernetes.io/dockerconfigjson`
 
 * docker
-    - pristtlt/autosecret:v1.0
-    - registry.cn-hongkong.aliyuncs.com/sync-dockerimage/autosecret:v1.0
+    - [pristtlt/autosecret:v1.0](https://hub.docker.com/r/pristtlt/autosecret)
+    - aliyun hk public repo: registry.cn-hongkong.aliyuncs.com/sync-dockerimage/autosecret:v1.0
     

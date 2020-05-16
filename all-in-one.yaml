@@ -21,7 +21,7 @@ rules:
   verbs: ["watch"]
 - apiGroups: [""]
   resources: ["secrets"]
-  verbs: ["get", "list", "update", "create", "delete"]
+  verbs: ["get", "list", "create", "delete"]
 
 ---
 kind: ClusterRoleBinding
@@ -34,7 +34,7 @@ subjects:
   namespace: autosecret
 roleRef:
   kind: ClusterRole
-  name: view
+  name: autosecretClusterRole
   apiGroup: rbac.authorization.k8s.io
 
 ---
@@ -57,7 +57,7 @@ spec:
       serviceAccountName: autosecret-sa
       containers:
       - name: autosecret
-        image: pristtlt/autosecret:v1.0
+        image: pristtlt/autosecret:v1.1
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - name: config
